@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geography Choice Adventure</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #game-container {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 { color: #2c3e50; font-size: 1.8em; }
+        h2 { color: #34495e; font-size: 1.3em; margin-bottom: 5px; }
+        .concept-tag {
+            display: inline-block;
+            background: #e1f0fa;
+            color: #2980b9;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .visual-box {
+            font-size: 4em;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #bdc3c7;
+        }
+        p.scenario-text { font-size: 1.1em; line-height: 1.5; text-align: left; margin-bottom: 25px;}
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .btn:hover { background: #3498db; color: white; }
+        .btn-wrong { border-color: #e74c3c; color: #e74c3c; text-align: center; }
+        .btn-wrong:hover { background: #e74c3c; color: white; }
+        .btn-right { border-color: #2ecc71; color: #2ecc71; text-align: center; }
+        .btn-right:hover { background: #2ecc71; color: white; }
+
+        .hidden { display: none !important; }
+
+        #report-card { text-align: left; }
+        .report-item {
+            background: #f9f9f9;
+            border-left: 5px solid #f1c40f;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .grade-A { border-color: #2ecc71; }
+        .grade-B { border-color: #e67e22; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="intro-screen">
+        <h1>🌍 The Chief Geographer's Mission</h1>
+        <div class="visual-box">🗺️🧭</div>
+        <p class="scenario-text">Welcome! You have been appointed as the Chief Geographer for a growing civilization. Your people will face harsh weather, new environments, and growing pains. You must make choices to ensure they survive and thrive.</p>
+        <button class="btn" style="text-align: center;" onclick="startGame()">Start the Mission</button>
+    </div>
+
+    <div id="play-screen" class="hidden">
+        <div id="concept-label" class="concept-tag">Concept Focus</div>
+        <h2 id="scenario-title">Scenario Title</h2>
+        <div id="visual-display" class="visual-box">❓</div>
+        <p id="scenario-desc" class="scenario-text">Scenario description goes here...</p>
+        <div id="choices-container">
+            </div>
+    </div>
+
+    <div id="report-screen" class="hidden">
+        <h1>📜 Your Final Report Card</h1>
+        <div class="visual-box">🎓🏆</div>
+        <p class="scenario-text">Here is an analysis of your geographic decision-making based on the core concepts of this unit.</p>
+        <div id="report-card">
+            </div>
+        <button class="btn" style="text-align: center;" onclick="location.reload()">Restart Sandbox</button>
+    </div>
+</div>
+
+<script>
+    // Database of Scenarios based on core concepts
+    const scenarios = [
+        {
+            concept: "Concept: Physical Impacts",
+            title: "The Shaking Coastline",
+            setupVisual: "🌊🏘️",
+            text: "Your civilization is built near the ocean. Suddenly, an earthquake strikes offshore, triggering a massive tsunami that damages the town! The physical environment is severely impacting your people. As they prepare to rebuild, what do you command them to do?",
+            choices: [
+                {
+                    text: "Recycle the older, fragile materials and rebuild on the exact same coastal plots, since the land is already divided, owned, and paid for.",
+                    isCorrect: false,
+                    resultVisual: "🌊💥🏚️",
+                    feedback: "Disaster! While recycling and respecting property lines makes financial sense in the short term, you ignored the deadly impact of the physical process. The next time the earth shakes, your town is destroyed again."
+                },
+                {
+                    text: "Abandon the coastal properties despite the financial loss, relocate the town further inland, and construct an early warning tower.",
+                    isCorrect: true,
+                    resultVisual: "🏙️📡✅",
+                    feedback: "Excellent leadership! You understood the severe impact of earthquakes and tsunamis, and you accepted the financial cost of moving to keep your people safe."
+                }
+            ]
+        },
+        {
+            concept: "Concept: Human Adaptation",
+            title: "The Sweltering Desert",
+            setupVisual: "☀️🐪🏜️",
+            text: "Your people migrate to a new territory. It is incredibly hot and dry year-round. You cannot change the weather. How will your people ADAPT to this physical environment?",
+            choices: [
+                {
+                    text: "Change your cultural habits by wearing light-colored, breathable fabrics, and use the local clay to build thick-walled homes that naturally keep the heat out.",
+                    isCorrect: true,
+                    resultVisual: "🛖😎🧊",
+                    feedback: "Perfect! You ADAPTED. Adaptation means changing human behaviors (like what we wear and how we build) to survive in an environment without altering the earth itself."
+                },
+                {
+                    text: "Preserve your cultural heritage by continuing to wear traditional heavy animal furs, and import expensive timber from afar to build the wooden cabins your people are used to.",
+                    isCorrect: false,
+                    resultVisual: "🥵🪵🔥",
+                    feedback: "Terrible choice! While preserving culture is important, your people are overheating and spending all their money on imported wood. You failed to adapt to the reality of the physical environment."
+                }
+            ]
+        },
+        {
+            concept: "Concept: Environmental Modification",
+            title: "The Great Mountain Barrier",
+            setupVisual: "⛰️🚧🛤️",
+            text: "Your city is thriving, but a massive mountain range blocks your trade wagons from reaching the neighboring kingdom. It's time to MODIFY the physical environment. What do you do?",
+            choices: [
+                {
+                    text: "Adapt to the terrain by abandoning large trade wagons. Instead, train local mountain goats to carry small, limited amounts of goods over the treacherous peaks.",
+                    isCorrect: false,
+                    resultVisual: "📉🐐😔",
+                    feedback: "Your economy crashed. While this is a clever adaptation, it doesn't allow enough trade for your growing city. Sometimes, you cannot just adapt; you must actively change the physical environment to meet human needs!"
+                },
+                {
+                    text: "Fund a massive engineering project to blast a transportation tunnel straight through the mountain rock, permanently altering the landscape.",
+                    isCorrect: true,
+                    resultVisual: "🚇🚂💰",
+                    feedback: "Brilliant! You MODIFIED the environment. Modification means actively altering the earth's landscape (like building transportation infrastructure or mining) to benefit society."
+                }
+            ]
+        }
+    ];
+
+    let currentStep = 0;
+    let mistakesOnCurrent = 0;
+    let finalReport = [];
+
+    // DOM Elements
+    const introScreen = document.getElementById('intro-screen');
+    const playScreen = document.getElementById('play-screen');
+    const reportScreen = document.getElementById('report-screen');
+    
+    function startGame() {
+        introScreen.classList.add('hidden');
+        playScreen.classList.remove('hidden');
+        loadScenario();
+    }
+
+    function loadScenario() {
+        const scenario = scenarios[currentStep];
+        document.getElementById('concept-label').innerText = scenario.concept;
+        document.getElementById('scenario-title').innerText = scenario.title;
+        document.getElementById('visual-display').innerText = scenario.setupVisual;
+        document.getElementById('scenario-desc').innerText = scenario.text;
+        
+        const choicesDiv = document.getElementById('choices-container');
+        choicesDiv.innerHTML = ''; // Clear old buttons
+
+        scenario.choices.forEach((choice) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerText = choice.text;
+            btn.onclick = () => handleChoice(choice);
+            choicesDiv.appendChild(btn);
+        });
+    }
+
+    function handleChoice(choice) {
+        const scenario = scenarios[currentStep];
+        const choicesDiv = document.getElementById('choices-container');
+        
+        // Change visual and text to show the consequence (Branching)
+        document.getElementById('visual-display').innerText = choice.resultVisual;
+        document.getElementById('scenario-desc').innerText = choice.feedback;
+        choicesDiv.innerHTML = ''; 
+
+        if (choice.isCorrect) {
+            // Save data for report card
+            if (mistakesOnCurrent === 0) {
+                finalReport.push({ concept: scenario.concept, status: "Mastered! (First Try)", class: "grade-A" });
+            } else {
+                finalReport.push({ concept: scenario.concept, status: "Learned from Mistakes", class: "grade-B" });
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-right';
+            nextBtn.innerText = "Correct! Continue to next region ➔";
+            nextBtn.onclick = () => {
+                currentStep++;
+                if (currentStep < scenarios.length) {
+                    mistakesOnCurrent = 0;
+                    loadScenario();
+                } else {
+                    showReportCard();
+                }
+            };
+            choicesDiv.appendChild(nextBtn);
+        } else {
+            mistakesOnCurrent++;
+            const backBtn = document.createElement('button');
+            backBtn.className = 'btn btn-wrong';
+            backBtn.innerText = "➔ Branch Back & Try Another Strategy";
+            backBtn.onclick = () => loadScenario(); // Reloads the original question
+            choicesDiv.appendChild(backBtn);
+        }
+    }
+
+    function showReportCard() {
+        playScreen.classList.add('hidden');
+        reportScreen.classList.remove('hidden');
+        
+        const reportDiv = document.getElementById('report-card');
+        reportDiv.innerHTML = '';
+
+        finalReport.forEach(item => {
+            const div = document.createElement('div');
+            div.className = `report-item ${item.class}`;
+            div.innerHTML = `<strong>${item.concept}</strong><br>Status: ${item.status}`;
+            reportDiv.appendChild(div);
+        });
+    }
+</script>
+
+</body>
+</html>
