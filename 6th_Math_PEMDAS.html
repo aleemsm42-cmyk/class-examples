@@ -1,0 +1,581 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Resource: Galactic Code Breaker</title>
+    <style>
+        /* =========================================
+           TEACHER RESOURCE PAGE STYLES
+           ========================================= */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .resource-container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .resource-container h1.page-title { 
+            color: #e76f51; 
+            border-bottom: 3px solid #f4a261; 
+            padding-bottom: 10px; 
+            font-size: 2.2rem;
+            margin-top: 0;
+        }
+        
+        .resource-container h2.section-title { 
+            color: #2a9d8f; 
+            border-bottom: 2px solid #ddd; 
+            padding-bottom: 5px; 
+            margin-top: 40px;
+        }
+
+        .resource-container p, .resource-container ul {
+            font-size: 1.1rem;
+        }
+
+        .prompt-box {
+            background-color: #2b2d42;
+            color: #edf2f4;
+            padding: 20px;
+            border-left: 5px solid #ef233c;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .highlight-box {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+
+        /* =========================================
+           GAME STYLES (Isolated)
+           ========================================= */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        .game-wrapper {
+            background-color: #0d1117;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            font-family: 'Roboto', sans-serif;
+            color: #c9d1d9;
+        }
+
+        .game-container {
+            background-color: #161b22;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .game-container header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #58a6ff;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .game-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #58a6ff;
+            margin: 0;
+            font-size: 1.8rem;
+            border: none;
+            padding: 0;
+        }
+
+        .game-container .lives-container {
+            font-size: 1.5rem;
+            color: #ff7b72;
+            font-weight: bold;
+        }
+
+        .game-container h2.level-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #79c0ff;
+            font-size: 1.4rem;
+            margin-top: 0;
+            border: none;
+            padding: 0;
+        }
+
+        .game-container p.question-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .game-container .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .game-container button.game-btn {
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+        }
+
+        .game-container button.game-btn:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+        }
+
+        .game-container button.correct {
+            background-color: #238636 !important;
+            border-color: #2ea043 !important;
+            color: white !important;
+        }
+
+        .game-container button.wrong {
+            background-color: #da3633 !important;
+            border-color: #f85149 !important;
+            color: white !important;
+        }
+
+        .game-container .feedback-panel {
+            background-color: #1f2428;
+            border-left: 5px solid #58a6ff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .game-container .feedback-panel h3 {
+            margin-top: 0;
+            color: #58a6ff;
+        }
+
+        .game-container button.action-btn {
+            background-color: #58a6ff;
+            color: #0d1117;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .game-container button.action-btn:hover {
+            background-color: #79c0ff;
+        }
+
+        .game-container .hidden {
+            display: none !important;
+        }
+
+        .game-container .text-center {
+            text-align: center;
+        }
+
+        .game-container .report-box {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .game-container .report-box h3 { 
+            color: #3fb950; 
+            margin-top: 0; 
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .game-container textarea.game-textarea {
+            width: 100%;
+            height: 100px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: 'Roboto', sans-serif;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        .game-container #final-export-text {
+            height: 250px;
+            font-family: monospace;
+            background-color: #161b22;
+            border: 1px solid #58a6ff;
+            color: #c9d1d9;
+            font-size: 1.1rem;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="resource-container">
+    <h1 class="page-title">Teacher Resource: Galactic Code Breaker (Math)</h1>
+
+    <h2 class="section-title text-center" style="text-align: center; border: none; margin-bottom: -10px; margin-top: 20px;">Playable Game Preview</h2>
+
+    <div class="game-wrapper">
+        <div class="game-container">
+            <header id="game-header">
+                <h1>Galactic Code Breaker</h1>
+                <div class="lives-container" id="lives-display">
+                    Lives: <span id="hearts">❤️❤️❤️</span>
+                </div>
+            </header>
+
+            <div id="gameplay-section">
+                <h2 class="level-title" id="level-title">Sector 1: System Boot</h2>
+                <p class="question-text" id="question-text">Loading...</p>
+                
+                <div class="options-grid" id="options-container"></div>
+
+                <div id="feedback-section" class="feedback-panel hidden">
+                    <h3 id="feedback-title">Feedback</h3>
+                    <p id="feedback-text"></p>
+                    <button class="action-btn" id="next-btn" onclick="nextQuestion()">Continue</button>
+                </div>
+            </div>
+
+            <div id="game-over-section" class="hidden text-center">
+                <h2 style="color: #ff7b72; font-family: 'Orbitron', sans-serif; font-size: 2rem; border:none;">CRITICAL FAILURE</h2>
+                <p>Your ship's systems have crashed due to too many incorrect operations. The galaxy remains locked.</p>
+                <button class="action-btn" onclick="restartGame()">Reboot System (Restart)</button>
+            </div>
+
+            <div id="final-report-section" class="hidden">
+                <h2 style="color: #3fb950; font-family: 'Orbitron', sans-serif; font-size: 2rem; border:none;">SYSTEMS RESTORED</h2>
+                <p>Excellent work, Commander. You have successfully navigated the Order of Operations to save the fleet.</p>
+                
+                <div class="report-box">
+                    <h3>Mission Stats</h3>
+                    <span id="final-data-summary"></span>
+                </div>
+
+                <div id="reflection-section">
+                    <label for="student-reflection"><strong>Commander's Log (Reflection):</strong> Write 2-3 sentences explaining the most important rule of PEMDAS you used today.</label>
+                    <textarea id="student-reflection" class="game-textarea" placeholder="Type your reflection here..."></textarea>
+                    <button class="action-btn" onclick="prepareCopy()">Generate Canvas Report</button>
+                </div>
+
+                <div id="manual-copy-section" class="hidden">
+                    <label for="final-export-text" style="color:#58a6ff;"><strong>Highlight and copy the text below, then paste it into your assignment:</strong></label>
+                    <textarea id="final-export-text" class="game-textarea" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section>
+        <h2 class="section-title">Educational Context</h2>
+        <p><strong>Audience:</strong> 6th Grade Math</p>
+        <p><strong>TEKS Alignment:</strong> 6.7(A) & CCSS.MATH.CONTENT.6.EE.A.2.C - Equivalent Expressions & Order of Operations (PEMDAS).</p>
+        <p><strong>Description:</strong> This interactive, 10-level challenge allows students to navigate sequence-based math problems to restore a spaceship's systems. It includes a cascading "lives" mechanic where incorrect operations drain system integrity, eventually forcing a reboot. It serves as an engaging, high-stakes "Check for Understanding" during an expressions and equations unit, culminating in an Algebra 1 "Boss Level."</p>
+    </section>
+
+    <section>
+        <h2 class="section-title">Adapt This Idea (For Teachers Using AI)</h2>
+        <p>If you have never coded before, you can still create a game just like this! Copy the massive prompt below and paste it into an AI like ChatGPT, Claude, or Gemini. It is specifically designed to force the AI to build a complete, structurally sound educational game customized for your classroom.</p>
+        <div class="prompt-box">Act as an Expert Educational Game Developer. I want you to code an interactive, HTML-based branching narrative game (like a "Choose Your Own Adventure") to teach my students a core academic concept.
+
+REQUIREMENTS FOR THE CODE:
+1. Format: It must be a single, self-contained HTML file containing inline CSS (for styling) and JavaScript (for the game logic). I need to be able to copy and paste the code directly into a website builder.
+2. UI/Design: It needs a clean, modern interface with a split stats-bar at the top.
+3. Mechanics: It must track 4 specific variables. The player will face 5 distinct scenarios (Years/Levels). Every choice they make must mathematically impact those 4 variables.
+4. Educational Depth: Include "Cascading Logic." For example, if a foundational variable drops below 30%, it should automatically trigger a collapse in dependent variables.
+5. Feedback: After every choice, show a feedback screen that explains the real-world educational concept behind what just happened.
+6. The Ending: The game must conclude with a Final Report that averages their score, assigns a letter grade (A-F), displays their final stats, and provides a &lt;textarea&gt; for a final student reflection. The student should be able to highlight and manually copy their reflection and final stats.
+
+BEFORE YOU WRITE ANY CODE, please ask me the following 4 questions so we can tailor the content:
+1. What is the specific Subject, Topic, and Grade Level?
+2. What are the specific Learning Standards (TEKS, NGSS, Common Core) I am targeting?
+3. What reading level/tone should the narrative use?
+4. What 4 distinct variables (Stats) do you want the game to track on the progress bar?</div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Hosting & Raw Code</h2>
+        <div class="highlight-box">
+            <p><strong>Want to use the Galactic Code Breaker game exactly as it is written above? Follow these steps:</strong></p>
+            <ul>
+                <li><strong>Step 1:</strong> Select all the text on this page (Ctrl+A or Cmd+A), and copy it.</li>
+                <li><strong>Step 2:</strong> Open your Google Site editor and click <strong>Embed</strong> on the right-hand Insert menu.</li>
+                <li><strong>Step 3:</strong> Select the <strong>Embed Code</strong> tab, paste the text, and hit <strong>Next</strong>, then <strong>Insert</strong>.</li>
+                <li><strong>Step 4:</strong> <strong>Crucial Step</strong> - Drag the bottom handle of the blue bounding box down far enough so that students will not have to scroll within the box to see the final output text area at the end of the game.</li>
+            </ul>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    // --- GAME ENGINE SCRIPT ---
+    let lives = 3;
+    let currentQ = 0;
+    let score = 0; 
+    let firstTry = true;
+
+    const questions = [
+        {
+            title: "Sector 1: Basic Boot",
+            q: "Identify the FIRST step to solve: 12 - 4 × 2 + 3",
+            options: ["12 - 4", "4 × 2", "2 + 3", "12 + 3"],
+            answer: 1,
+            exp: "According to PEMDAS, Multiplication (×) and Division (÷) come before Addition (+) and Subtraction (-)."
+        },
+        {
+            title: "Sector 2: Parenthetical Override",
+            q: "What is the FIRST step to evaluate: 15 ÷ (3 + 2) × 4",
+            options: ["15 ÷ 3", "2 × 4", "3 + 2", "15 ÷ 5"],
+            answer: 2,
+            exp: "The 'P' in PEMDAS stands for Parentheses. You must always solve the math inside the grouping symbols first (3 + 2)."
+        },
+        {
+            title: "Sector 3: Power Surge",
+            q: "After evaluating the parentheses in (8 - 3)² + 4, you get 5² + 4. What is the next correct number?",
+            options: ["25", "10", "9", "29"],
+            answer: 0,
+            exp: "The 'E' stands for Exponents. 5² means 5 × 5, which is 25. You do this before adding 4."
+        },
+        {
+            title: "Sector 4: Linear Processing",
+            q: "Evaluate the full expression: 3 + 6 × 2 - 4 ÷ 2",
+            options: ["13", "16", "7", "11"],
+            answer: 0,
+            exp: "Multiply and Divide left-to-right first: (6 × 2) = 12 and (4 ÷ 2) = 2. Then Add and Subtract left-to-right: 3 + 12 - 2 = 13."
+        },
+        {
+            title: "Sector 5: Variable Calibration",
+            q: "Combine the like terms to simplify: 4x + 3 + 2x - 1",
+            options: ["9x", "6x + 2", "8x + 2", "6x + 4"],
+            answer: 1,
+            exp: "You can only combine terms with the same variables. Combine 4x and 2x to get 6x. Then combine the constants 3 and -1 to get 2."
+        },
+        {
+            title: "Sector 6: Alpha-Beta Matrices",
+            q: "Simplify the expression: 5a + 2b - 3a + 4b",
+            options: ["8ab", "2a - 6b", "2a + 6b", "8a + 6b"],
+            answer: 2,
+            exp: "Combine the 'a' terms (5a - 3a = 2a) and the 'b' terms (2b + 4b = 6b). They cannot be combined with each other!"
+        },
+        {
+            title: "Sector 7: Nested Sequences",
+            q: "Evaluate: 2 × (4² - 6) ÷ 2",
+            options: ["10", "16", "5", "20"],
+            answer: 0,
+            exp: "Inside parentheses first: Exponents (4² = 16), then Subtract (16 - 6 = 10). Now multiply and divide left-to-right: 2 × 10 = 20, then 20 ÷ 2 = 10."
+        },
+        {
+            title: "Sector 8: Distribution Protocol",
+            q: "Simplify: 7y - 2(y + 3) + 6. (Hint: Distribute the -2 first!)",
+            options: ["5y", "5y + 12", "5y + 3", "9y"],
+            answer: 0,
+            exp: "Distribute the -2 to get -2y - 6. The expression becomes 7y - 2y - 6 + 6. Combine like terms: 5y + 0, which is just 5y."
+        },
+        {
+            title: "Sector 9: Fraction Core",
+            q: "Evaluate the expression: (20 - 4 × 2) / (6 ÷ 2)",
+            options: ["4", "2", "6", "12"],
+            answer: 0,
+            exp: "Treat the numerator and denominator like they are in parentheses. Numerator: 20 - 8 = 12. Denominator: 6 ÷ 2 = 3. Finally, divide 12 ÷ 3 = 4."
+        },
+        {
+            title: "BOSS LEVEL: Algebra 1 Mainframe",
+            q: "Simplify completely: 3x² - 2x(x - 4) + 5x - 7",
+            options: ["x² + 13x - 7", "x² + 3x - 7", "5x² + 13x - 7", "x² - 3x - 7"],
+            answer: 0,
+            exp: "Distribute -2x: -2x² + 8x. The expression is 3x² - 2x² + 8x + 5x - 7. Combine like terms: x² + 13x - 7. Incredible job!"
+        }
+    ];
+
+    function updateHearts() {
+        let heartStr = "";
+        for(let i=0; i<lives; i++) heartStr += "❤️";
+        for(let i=lives; i<3; i++) heartStr += "🖤";
+        document.getElementById('hearts').innerText = heartStr;
+    }
+
+    function loadQuestion() {
+        if (currentQ >= questions.length) {
+            endGameSuccess();
+            return;
+        }
+
+        firstTry = true;
+        const qData = questions[currentQ];
+        
+        document.getElementById('level-title').innerText = qData.title;
+        document.getElementById('question-text').innerText = qData.q;
+        
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = ""; 
+        
+        qData.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = "game-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+
+        document.getElementById('feedback-section').classList.add('hidden');
+    }
+
+    function checkAnswer(selectedIndex, btnElement) {
+        const allButtons = document.querySelectorAll('#options-container button');
+        allButtons.forEach(b => b.disabled = true);
+
+        const qData = questions[currentQ];
+        const feedbackSec = document.getElementById('feedback-section');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextBtn = document.getElementById('next-btn');
+
+        feedbackSec.classList.remove('hidden');
+
+        if (selectedIndex === qData.answer) {
+            btnElement.classList.add('correct');
+            feedbackTitle.innerText = "Correct! Access Granted.";
+            feedbackTitle.style.color = "#3fb950";
+            feedbackText.innerText = qData.exp;
+            
+            if (firstTry) score++; 
+
+            nextBtn.innerText = "Proceed to Next Sector";
+            nextBtn.onclick = () => {
+                currentQ++;
+                loadQuestion();
+            };
+        } else {
+            btnElement.classList.add('wrong');
+            lives--;
+            updateHearts();
+            firstTry = false;
+
+            if (lives <= 0) {
+                document.getElementById('gameplay-section').classList.add('hidden');
+                document.getElementById('game-over-section').classList.remove('hidden');
+                document.getElementById('game-header').classList.add('hidden');
+            } else {
+                feedbackTitle.innerText = "Error! Incorrect Sequence.";
+                feedbackTitle.style.color = "#f85149";
+                feedbackText.innerText = "Wait, that's not right. " + qData.exp;
+                
+                nextBtn.innerText = "Try Again (Lost 1 Life)";
+                nextBtn.onclick = () => {
+                    feedbackSec.classList.add('hidden');
+                    allButtons.forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('wrong');
+                    });
+                };
+            }
+        }
+    }
+
+    function endGameSuccess() {
+        document.getElementById('gameplay-section').classList.add('hidden');
+        document.getElementById('game-header').classList.add('hidden');
+        document.getElementById('final-report-section').classList.remove('hidden');
+
+        let percent = (score / questions.length) * 100;
+        let letter = "F";
+        if (percent >= 90) letter = "A";
+        else if (percent >= 80) letter = "B";
+        else if (percent >= 70) letter = "C";
+        else if (percent >= 60) letter = "D";
+
+        const statsText = `=== GALACTIC CODE BREAKER REPORT ===\nSystem Integrity (Lives Left): ${lives}/3\nFirst-Try Accuracy: ${score}/${questions.length} (${percent}%)\nFinal Rank: ${letter}`;
+
+        document.getElementById('final-data-summary').innerText = statsText;
+    }
+
+    function prepareCopy() {
+        const reflection = document.getElementById('student-reflection').value;
+        if (!reflection.trim()) { 
+            alert("Commander, please log your reflection before exporting data!"); 
+            return; 
+        }
+        
+        const summary = document.getElementById('final-data-summary').innerText;
+        const finalText = `${summary}\n\n--- COMMANDER's LOG ---\n${reflection}`;
+        
+        document.getElementById('reflection-section').classList.add('hidden');
+        document.getElementById('manual-copy-section').classList.remove('hidden');
+        
+        const exportBox = document.getElementById('final-export-text');
+        exportBox.value = finalText;
+        exportBox.focus();
+        exportBox.select();
+        
+        try { document.execCommand('copy'); } catch(e) {}
+    }
+
+    function restartGame() {
+        lives = 3;
+        currentQ = 0;
+        score = 0;
+        firstTry = true;
+        updateHearts();
+
+        document.getElementById('game-over-section').classList.add('hidden');
+        document.getElementById('final-report-section').classList.add('hidden');
+        document.getElementById('manual-copy-section').classList.add('hidden');
+        document.getElementById('reflection-section').classList.remove('hidden');
+        document.getElementById('student-reflection').value = "";
+        
+        document.getElementById('game-header').classList.remove('hidden');
+        document.getElementById('gameplay-section').classList.remove('hidden');
+
+        loadQuestion();
+    }
+
+    // Initialize game on load
+    loadQuestion();
+    updateHearts();
+</script>
+
+</body>
+</html>
+
+

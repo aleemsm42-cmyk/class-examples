@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Resource: The Recess Mystery</title>
+    <style>
+        /* =========================================
+           TEACHER RESOURCE PAGE STYLES
+           ========================================= */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .resource-container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1.page-title { 
+            color: #e76f51; 
+            border-bottom: 3px solid #f4a261; 
+            padding-bottom: 10px; 
+            font-size: 2.2rem;
+            margin-top: 0;
+        }
+        
+        h2.section-title { 
+            color: #2a9d8f; 
+            border-bottom: 2px solid #ddd; 
+            padding-bottom: 5px; 
+            margin-top: 40px;
+        }
+
+        /* The blue staging area behind the game */
+        .game-preview-area {
+            background-color: #e0f7fa;
+            padding: 40px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border: 2px dashed #00bcd4;
+        }
+
+        .prompt-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-left: 5px solid #e76f51;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            font-size: 14px;
+            overflow-x: auto;
+            border-radius: 0 8px 8px 0;
+            color: #444;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
+
+        .export-box {
+            width: 100%;
+            height: 300px;
+            background-color: #2b2b2b;
+            color: #a9b7c6;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 2px solid #333;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+        strong.keyword { color: #e76f51; }
+
+        /* =========================================
+           GAME SPECIFIC STYLES
+           ========================================= */
+        #game-container {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: #ffffff;
+            border: 5px solid #00bcd4;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            text-align: center;
+            color: #333;
+        }
+        
+        #game-container h1.game-title {
+            color: #ff5722;
+            font-size: 32px;
+            border: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+        
+        #game-container p.game-text {
+            font-size: 22px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        #game-container .screen { display: none; }
+        #game-container .active { display: block; }
+        
+        #game-container .btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 25px;
+            font-size: 20px;
+            font-family: inherit;
+            margin: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.2s;
+            width: 80%;
+            max-width: 400px;
+        }
+        
+        #game-container .btn:hover { background-color: #388e3c; }
+        #game-container .btn-quiz { background-color: #ff9800; }
+        #game-container .btn-quiz:hover { background-color: #f57c00; }
+        #game-container .feedback { margin-top: 20px; min-height: 40px; }
+        #game-container .img-placeholder { font-size: 60px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<div class="resource-container">
+    <h1 class="page-title">Teacher Resource: The Recess Mystery</h1>
+    
+    <div class="game-preview-area">
+        <div id="game-container">
+            <div id="start" class="screen active">
+                <h1 class="game-title">The Recess Mystery</h1>
+                <div class="img-placeholder">🔍⚽</div>
+                <p class="game-text">Ring! The bell rings for recess. You run outside to play kickball. But oh no! The red kickball is missing from the toy bin. Where did it go?</p>
+                <p class="game-text">What do you want to do first?</p>
+                <button class="btn" onclick="showScreen('clues')">Look for clues on the ground</button>
+                <button class="btn" onclick="showScreen('friend')">Ask your friend Mia for help</button>
+            </div>
+
+            <div id="clues" class="screen">
+                <h1 class="game-title">Follow the Clues</h1>
+                <div class="img-placeholder">🐾</div>
+                <p class="game-text">You look closely at the dirt. You see little muddy footprints! They go toward the playground.</p>
+                <p class="game-text">What do you do next?</p>
+                <button class="btn" onclick="showScreen('follow')">Follow the muddy prints</button>
+                <button class="btn" onclick="showScreen('bushes')">Look in the big bushes instead</button>
+            </div>
+
+            <div id="friend" class="screen">
+                <h1 class="game-title">Teamwork</h1>
+                <div class="img-placeholder">👧🏽</div>
+                <p class="game-text">You ask Mia for help. Mia says, "Let's split up and search fast!"</p>
+                <p class="game-text">Where do you want to look?</p>
+                <button class="btn" onclick="showScreen('swings')">Search by the swings</button>
+                <button class="btn" onclick="showScreen('slide')">Search by the big slide</button>
+            </div>
+
+            <div id="follow" class="screen">
+                <h1 class="game-title">Mystery Solved!</h1>
+                <div class="img-placeholder">🏖️</div>
+                <p class="game-text">You follow the prints all the way to the sandbox. A little raccoon was playing with the ball! It runs away, and you get the ball back.</p>
+                <button class="btn btn-quiz" onclick="showScreen('quiz-follow')">Take the Quiz!</button>
+            </div>
+
+            <div id="quiz-follow" class="screen">
+                <h1 class="game-title">What is the Central Idea?</h1>
+                <p class="game-text">Think about the story you just read. What is the central idea?</p>
+                <button class="btn" onclick="checkAnswer('feedback-follow', false)">A) Raccoons are very fast.</button>
+                <button class="btn" onclick="checkAnswer('feedback-follow', true)">B) Following clues helped find the lost ball.</button>
+                <button class="btn" onclick="checkAnswer('feedback-follow', false)">C) The sandbox has a lot of mud.</button>
+                <div id="feedback-follow" class="feedback"></div>
+                <button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()">Read Again</button>
+            </div>
+
+            <div id="bushes" class="screen">
+                <h1 class="game-title">Mystery Solved!</h1>
+                <div class="img-placeholder">🐕</div>
+                <p class="game-text">You peek inside the big bushes. A cute dog is sleeping inside with the red ball! The dog wakes up and drops the ball for you.</p>
+                <button class="btn btn-quiz" onclick="showScreen('quiz-bushes')">Take the Quiz!</button>
+            </div>
+
+            <div id="quiz-bushes" class="screen">
+                <h1 class="game-title">What is the Central Idea?</h1>
+                <p class="game-text">Think about the story you just read. What is the central idea?</p>
+                <button class="btn" onclick="checkAnswer('feedback-bushes', true)">A) A dog took the lost ball and hid it in the bushes.</button>
+                <button class="btn" onclick="checkAnswer('feedback-bushes', false)">B) You should always look for footprints.</button>
+                <button class="btn" onclick="checkAnswer('feedback-bushes', false)">C) Dogs like to sleep a lot.</button>
+                <div id="feedback-bushes" class="feedback"></div>
+                <button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()">Read Again</button>
+            </div>
+
+            <div id="swings" class="screen">
+                <h1 class="game-title">Mystery Solved!</h1>
+                <div class="img-placeholder">🤝</div>
+                <p class="game-text">You look by the swings, and Mia looks by the bench. Mia shouts, "I found it!" You high-five each other.</p>
+                <button class="btn btn-quiz" onclick="showScreen('quiz-swings')">Take the Quiz!</button>
+            </div>
+
+            <div id="quiz-swings" class="screen">
+                <h1 class="game-title">What is the Central Idea?</h1>
+                <p class="game-text">Think about the story you just read. What is the central idea?</p>
+                <button class="btn" onclick="checkAnswer('feedback-swings', false)">A) Swings can go very high in the sky.</button>
+                <button class="btn" onclick="checkAnswer('feedback-swings', false)">B) The ball is red and bouncy.</button>
+                <button class="btn" onclick="checkAnswer('feedback-swings', true)">C) Working together as a team helps you solve problems faster.</button>
+                <div id="feedback-swings" class="feedback"></div>
+                <button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()">Read Again</button>
+            </div>
+
+            <div id="slide" class="screen">
+                <h1 class="game-title">Mystery Solved!</h1>
+                <div class="img-placeholder">❤️</div>
+                <p class="game-text">You walk to the slide. A little boy is crying because he lost his toy car. You help him find it. To say thank you, he gives you the kickball he found earlier!</p>
+                <button class="btn btn-quiz" onclick="showScreen('quiz-slide')">Take the Quiz!</button>
+            </div>
+
+            <div id="quiz-slide" class="screen">
+                <h1 class="game-title">What is the Central Idea?</h1>
+                <p class="game-text">Think about the story you just read. What is the central idea?</p>
+                <button class="btn" onclick="checkAnswer('feedback-slide', true)">A) Helping someone else can sometimes help you solve your own problem.</button>
+                <button class="btn" onclick="checkAnswer('feedback-slide', false)">B) Toy cars are fun to play with on the slide.</button>
+                <button class="btn" onclick="checkAnswer('feedback-slide', false)">C) The little boy was crying.</button>
+                <div id="feedback-slide" class="feedback"></div>
+                <button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()">Read Again</button>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Teacher Notes & Workflow</h2>
+    <p><strong>How this Workflow Operates:</strong></p>
+    <ul>
+        <li><strong class="keyword">The Prep:</strong> You identify the TEK/Standard you are teaching next week.</li>
+        <li><strong class="keyword">The Customization:</strong> You fill in the 6 bracketed variables in the prompt to tell the AI exactly what the theme should be and what 4 stats the game should track.</li>
+        <li><strong class="keyword">The Generation:</strong> Paste it into Gemini, ChatGPT, or Claude. Because the prompt strictly dictates the UI design, the cascading math logic, and the exact copy/paste mechanics you finalized for the Final Report, the AI will build it perfectly on the first try.</li>
+        <li><strong class="keyword">The Deployment:</strong> You copy the raw HTML output, paste it into your Google Site "Embed Code" widget (or Canvas HTML editor), stretch the box so it doesn't scroll, and publish.</li>
+    </ul>
+
+    <h2 class="section-title">AI Generation Prompt Template</h2>
+    <p>Copy and paste the template below into your AI of choice (like Gemini or Claude). Fill in the bracketed info to generate a brand new interactive module instantly:</p>
+    
+    <div class="prompt-box">Act as an Expert Educational Game Developer. I want you to code an interactive, HTML-based branching narrative game (like a "Choose Your Own Adventure" simulator) to teach my students a core academic concept.
+Here are the specific parameters for this game:
+
+Grade Level: [Insert Grade Level, e.g., 8th Grade]
+Subject: [Insert Subject, e.g., US History]
+Target Standard (TEKS/NGSS): [Insert Standard, e.g., TEKS 8.4(b) - Causes of the American Revolution]
+Core Concept: [Insert Core Concept, e.g., The economic and political impact of British taxation]
+Game Theme/Objective: [Insert Theme, e.g., You are a colonial merchant in Boston trying to keep your business alive while navigating British taxes and rebel boycotts.]
+4 Variables to Track: [e.g., Wealth, Loyalist Support, Patriot Support, Smuggling Success]
+
+REQUIREMENTS FOR THE HTML/JS/CSS CODE:
+1. Code Structure: It must be a single, self-contained HTML file containing inline CSS (for styling) and JavaScript (for logic). I need to be able to copy and paste the raw code directly into an LMS (Canvas/Schoology) or Google Site embed block. Do not use external libraries.
+2. UI/Design: Create a clean, modern interface. Include a header with the game title. Below that, include a static "Stats Bar" displaying the 4 variables as progress bars (0-100%). Use a color palette appropriate for the theme.
+3. Gameplay Mechanics: 
+   * The player will face 5 distinct scenarios (Rounds/Levels).
+   * Give them 3 distinct choices per scenario.
+   * Every choice must mathematically impact the 4 variables.
+   * Include "Cascading Logic": If a foundational variable drops below a critical threshold (e.g., 30%), it should trigger an automatic penalty to the other variables and trigger a text warning on the feedback screen.
+4. Feedback Screen: After every choice, hide the scenario screen and show a feedback screen. This screen must explain the real-world educational concept behind what just happened based on their choice. Include a "Continue" button to move to the next round.
+5. Final Report & Assessment Export: 
+   * After the 5th round, hide the game board and show a Final Report.
+   * Calculate a final score based on their variable averages and assign a letter grade (A-F).
+   * Display a clean text summary of their final stats.
+   * Below the stats, provide a &lt;textarea&gt; prompting the student to write a 1-paragraph reflection based on the Core Concept.
+   * Crucial: Do NOT include any "Restart" buttons or extra UI elements on this final screen. The goal is for the student to easily highlight the final stats and their typed reflection, press Ctrl+C, and paste it into their LMS.</div>
+
+    <h2 class="section-title">Embedding Instructions</h2>
+    <p>To deploy this learning tool to your students:</p>
+    <ol>
+        <li>Select everything in your code editor and copy the generated raw HTML code.</li>
+        <li><strong>For Google Sites:</strong> Go to the Insert menu, click <strong>Embed</strong>, select the <strong>Embed Code</strong> tab, and paste the code.</li>
+        <li><strong>For Canvas / Schoology:</strong> Create a new Page or Assignment. Click the <strong>HTML Editor</strong> icon (usually `</>` or a cloud icon), and paste the code.</li>
+        <li>Drag the edges of the embedded widget so that it's tall enough for students to view the entire game without needing an inner scroll bar.</li>
+    </ol>
+
+    <h2 class="section-title">Ready-to-Use Student Embed Code</h2>
+    <p>Love the game the way it is? Copy the raw HTML below to paste exactly the standalone game (without any of the teacher notes above) into your LMS for your students to play right now!</p>
+    <textarea class="export-box" readonly spellcheck="false" onclick="this.select()">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;The Recess Mystery&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #game-container {
+            background-color: #ffffff;
+            border: 5px solid #00bcd4;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h1 { color: #ff5722; font-size: 32px; }
+        p { font-size: 22px; line-height: 1.5; }
+        .screen { display: none; }
+        .active { display: block; }
+        .btn {
+            background-color: #4caf50; color: white; border: none;
+            border-radius: 12px; padding: 15px 25px; font-size: 20px;
+            font-family: inherit; margin: 10px; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background-color 0.2s;
+            width: 80%; max-width: 400px;
+        }
+        .btn:hover { background-color: #388e3c; }
+        .btn-quiz { background-color: #ff9800; }
+        .btn-quiz:hover { background-color: #f57c00; }
+        .feedback { margin-top: 20px; min-height: 40px; }
+        .img-placeholder { font-size: 60px; margin: 10px 0; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div id="game-container"&gt;
+    &lt;div id="start" class="screen active"&gt;
+        &lt;h1&gt;The Recess Mystery&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;🔍⚽&lt;/div&gt;
+        &lt;p&gt;Ring! The bell rings for recess. You run outside to play kickball. But oh no! The red kickball is missing from the toy bin. Where did it go?&lt;/p&gt;
+        &lt;p&gt;What do you want to do first?&lt;/p&gt;
+        &lt;button class="btn" onclick="showScreen('clues')"&gt;Look for clues on the ground&lt;/button&gt;
+        &lt;button class="btn" onclick="showScreen('friend')"&gt;Ask your friend Mia for help&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="clues" class="screen"&gt;
+        &lt;h1&gt;Follow the Clues&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;🐾&lt;/div&gt;
+        &lt;p&gt;You look closely at the dirt. You see little muddy footprints! They go toward the playground.&lt;/p&gt;
+        &lt;p&gt;What do you do next?&lt;/p&gt;
+        &lt;button class="btn" onclick="showScreen('follow')"&gt;Follow the muddy prints&lt;/button&gt;
+        &lt;button class="btn" onclick="showScreen('bushes')"&gt;Look in the big bushes instead&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="friend" class="screen"&gt;
+        &lt;h1&gt;Teamwork&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;👧🏽&lt;/div&gt;
+        &lt;p&gt;You ask Mia for help. Mia says, "Let's split up and search fast!"&lt;/p&gt;
+        &lt;p&gt;Where do you want to look?&lt;/p&gt;
+        &lt;button class="btn" onclick="showScreen('swings')"&gt;Search by the swings&lt;/button&gt;
+        &lt;button class="btn" onclick="showScreen('slide')"&gt;Search by the big slide&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="follow" class="screen"&gt;
+        &lt;h1&gt;Mystery Solved!&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;🏖️&lt;/div&gt;
+        &lt;p&gt;You follow the prints all the way to the sandbox. A little raccoon was playing with the ball! It runs away, and you get the ball back.&lt;/p&gt;
+        &lt;button class="btn btn-quiz" onclick="showScreen('quiz-follow')"&gt;Take the Quiz!&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="quiz-follow" class="screen"&gt;
+        &lt;h1&gt;What is the Central Idea?&lt;/h1&gt;
+        &lt;p&gt;Think about the story you just read. What is the central idea?&lt;/p&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-follow', false)"&gt;A) Raccoons are very fast.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-follow', true)"&gt;B) Following clues helped find the lost ball.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-follow', false)"&gt;C) The sandbox has a lot of mud.&lt;/button&gt;
+        &lt;div id="feedback-follow" class="feedback"&gt;&lt;/div&gt;
+        &lt;button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()"&gt;Read Again&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="bushes" class="screen"&gt;
+        &lt;h1&gt;Mystery Solved!&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;🐕&lt;/div&gt;
+        &lt;p&gt;You peek inside the big bushes. A cute dog is sleeping inside with the red ball! The dog wakes up and drops the ball for you.&lt;/p&gt;
+        &lt;button class="btn btn-quiz" onclick="showScreen('quiz-bushes')"&gt;Take the Quiz!&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="quiz-bushes" class="screen"&gt;
+        &lt;h1&gt;What is the Central Idea?&lt;/h1&gt;
+        &lt;p&gt;Think about the story you just read. What is the central idea?&lt;/p&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-bushes', true)"&gt;A) A dog took the lost ball and hid it in the bushes.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-bushes', false)"&gt;B) You should always look for footprints.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-bushes', false)"&gt;C) Dogs like to sleep a lot.&lt;/button&gt;
+        &lt;div id="feedback-bushes" class="feedback"&gt;&lt;/div&gt;
+        &lt;button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()"&gt;Read Again&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="swings" class="screen"&gt;
+        &lt;h1&gt;Mystery Solved!&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;🤝&lt;/div&gt;
+        &lt;p&gt;You look by the swings, and Mia looks by the bench. Mia shouts, "I found it!" You high-five each other.&lt;/p&gt;
+        &lt;button class="btn btn-quiz" onclick="showScreen('quiz-swings')"&gt;Take the Quiz!&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="quiz-swings" class="screen"&gt;
+        &lt;h1&gt;What is the Central Idea?&lt;/h1&gt;
+        &lt;p&gt;Think about the story you just read. What is the central idea?&lt;/p&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-swings', false)"&gt;A) Swings can go very high in the sky.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-swings', false)"&gt;B) The ball is red and bouncy.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-swings', true)"&gt;C) Working together as a team helps you solve problems faster.&lt;/button&gt;
+        &lt;div id="feedback-swings" class="feedback"&gt;&lt;/div&gt;
+        &lt;button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()"&gt;Read Again&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="slide" class="screen"&gt;
+        &lt;h1&gt;Mystery Solved!&lt;/h1&gt;
+        &lt;div class="img-placeholder"&gt;❤️&lt;/div&gt;
+        &lt;p&gt;You walk to the slide. A little boy is crying because he lost his toy car. You help him find it. To say thank you, he gives you the kickball he found earlier!&lt;/p&gt;
+        &lt;button class="btn btn-quiz" onclick="showScreen('quiz-slide')"&gt;Take the Quiz!&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="quiz-slide" class="screen"&gt;
+        &lt;h1&gt;What is the Central Idea?&lt;/h1&gt;
+        &lt;p&gt;Think about the story you just read. What is the central idea?&lt;/p&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-slide', true)"&gt;A) Helping someone else can sometimes help you solve your own problem.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-slide', false)"&gt;B) Toy cars are fun to play with on the slide.&lt;/button&gt;
+        &lt;button class="btn" onclick="checkAnswer('feedback-slide', false)"&gt;C) The little boy was crying.&lt;/button&gt;
+        &lt;div id="feedback-slide" class="feedback"&gt;&lt;/div&gt;
+        &lt;button class="btn" style="margin-top: 30px; background-color: #9e9e9e;" onclick="restartGame()"&gt;Read Again&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    function showScreen(screenId) {
+        var screens = document.querySelectorAll('.screen');
+        screens.forEach(function(screen) { screen.classList.remove('active'); });
+        document.getElementById(screenId).classList.add('active');
+        var feedbacks = document.querySelectorAll('.feedback');
+        feedbacks.forEach(function(fb) { fb.innerHTML = ""; });
+    }
+    function checkAnswer(feedbackId, isCorrect) {
+        var feedbackDiv = document.getElementById(feedbackId);
+        if (isCorrect) {
+            feedbackDiv.innerHTML = "&lt;span style='color: #4caf50; font-weight: bold; font-size: 26px;'&gt;🌟 Great job! You found the central idea! 🌟&lt;/span&gt;";
+        } else {
+            feedbackDiv.innerHTML = "&lt;span style='color: #f44336; font-weight: bold; font-size: 26px;'&gt;Oops! Try again. What was the WHOLE story about?&lt;/span&gt;";
+        }
+    }
+    function restartGame() { showScreen('start'); }
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </textarea>
+</div>
+
+<script>
+    function showScreen(screenId) {
+        var screens = document.querySelectorAll('#game-container .screen');
+        screens.forEach(function(screen) { screen.classList.remove('active'); });
+        
+        document.getElementById(screenId).classList.add('active');
+        
+        var feedbacks = document.querySelectorAll('#game-container .feedback');
+        feedbacks.forEach(function(fb) { fb.innerHTML = ""; });
+    }
+
+    function checkAnswer(feedbackId, isCorrect) {
+        var feedbackDiv = document.getElementById(feedbackId);
+        if (isCorrect) {
+            feedbackDiv.innerHTML = "<span style='color: #4caf50; font-weight: bold; font-size: 26px;'>🌟 Great job! You found the central idea! 🌟</span>";
+        } else {
+            feedbackDiv.innerHTML = "<span style='color: #f44336; font-weight: bold; font-size: 26px;'>Oops! Try again. What was the WHOLE story about?</span>";
+        }
+    }
+
+    function restartGame() {
+        showScreen('start');
+    }
+</script>
+
+</body>
+</html>
+
+
